@@ -1,29 +1,42 @@
 import React, { Component } from 'react';
+import { Usuarios } from './Usuarios';
 import { variables } from './Variables';
 
 export class Deletar extends Component {
-
     constructor(props) {
         super(props);
         this.state = {
             users: [],
-            modalTitle: "",
-            UserData_nascimento: "",
-            UserSobrenome: "",
-            UserEmail: "",
-            UserNome: "",
-            UserId: 0,
-        };
+            selectedUser: null,
+        }
     }
 
-    deleteClick(id) {
+    componentDidMount() {
+        this.refreshList();
+    }
+
+    refreshList() {
+        fetch(variables.API_URL)
+            .then(response => response.json())
+            .then(data => {
+                this.setState({ users: data });
+            });
+    }
+
+    
+    
+
+    handleUserChange = (event) => {
+        const userId = parseInt(event.target.value);
+        const selectedUser = this.state.users.find(user => user.UserId === userId);
+        this.setState({ selectedUser });
+    }
+
+
+    deleteClick(pk) {
         if (window.confirm('Tem certeza?')) {
-            fetch(variables.API_URL + 'user/' + id, {
+            fetch(variables.API_URL + 'user/' + pk, {
                 method: 'DELETE',
-                headers: {
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json'
-                }
 
 
             })
@@ -36,42 +49,37 @@ export class Deletar extends Component {
                 })
         }
     }
-    render() {
-        const {
-            users,
-            modalTitle,
-            UserNome,
-            UserSobrenome,
-            UserEmail,
-            UserData_nascimento,
-        } = this.state;
 
 
-        return (
-            <div class="dropdown ">
-
-       
-                <button className="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    {users.map(use =>
-                        <tr key={use.UserId}>
-                            <td>{use.UserId}</td>
-                            <td>{use.UserNome}</td></tr>)}
-                </button>
-                <div className="dropdown-menu" aria-labelledby="dropdownMenuButton">
-
-                    <a className="dropdown-item" href="#" onClick={() => this.deleteUser(users.id)}>Delete {users.UserNome}</a>
-
-
-
-
+        render() {
+            const { users, selectedUser } = this.state;
+    
+            return (
+                <div>
+                    <select value={selectedUser ? selectedUser.UserId : ''} onChange={this.handleUserChange}>
+                        <option value="">Selecione um usuário</option>
+                        {users.map(user =>
+                            <option key={user.UserId} value={user.UserId}>{user.UserNome} {user.UserSobrenome}</option>
+                        )}
+                    </select>
+    
+                    {selectedUser && (
+                        <table className='table table-striped'>
+                            <th>ID: <br></br>{selectedUser.UserId}</th>
+                            <th>Nome:<br></br> {selectedUser.UserNome}</th>
+                            <th>Sobrenome: <br></br>{selectedUser.UserSobrenome}</th>
+                            <th>Email:<br></br> {selectedUser.UserEmail}</th>
+                            <th>Data de nascimento: <br></br>{selectedUser.UserData_nascimento}</th>
+                            <th>Data de criação:<br></br> {selectedUser.UserData_cadastro}</th>
+                        </table>
+                    )   
+        }
+                         
+                                <button type="button"
+                                    className="btn btn-primary float-center"  onClick={() => this.deleteClick(selectedUser.UserId)}>Deletar</button>
+                               
+                                   
                 </div>
-                <button type="button"
-                    className="btn btn-primary d-flex-justify-center" onClick={() => this.deleteClick()}>Delete</button>
-
-
-            </div>
-
-
-        )
+            );
+        }
     }
-}
