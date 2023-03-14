@@ -11,13 +11,13 @@ root.render(
     <App />
   </React.StrictMode>
   <footer className="container mx-auto p-6">
-				<div className="flex flex-col md:flex-row items-center d-flex justify-content-center .align-self-end">
+				<div className="flex flex-col md:flex-row items-center d-flex justify-content-center ">
 					<p className="mb-4 md:mb-0 md:text-xl"></p>
 
 					<div className="flex -mx-8 ">
-						<a href="#" className="mx-3 hover:opacity-80 duration-150">About us</a> | 
-						<a href="#" className="mx-3 hover:opacity-80 duration-150">Privacy</a> | 
-						<a href="#" className="mx-3 hover:opacity-80 duration-150">Contact</a>
+						<a href="https://www.edesoft.com.br/sobre-nos" className="mx-3 hover:opacity-80 duration-150">Sobre Nós</a> | 
+						<a href="https://www.edesoft.com.br/politicas-de-privacidade" className="mx-3 hover:opacity-80 duration-150">Privacidade</a> | 
+						<a href="https://www.edesoft.com.br/contato" className="mx-3 hover:opacity-80 duration-150">Contato</a>
 					</div>
 				</div>
 			</footer>

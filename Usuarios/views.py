@@ -30,17 +30,19 @@ def userAPI(request,pk=0):
        
         
     elif request.method=='POST':
-        user_data=JSONParser().parse(request)
-        users_serializer=UserSerializer(data=user_data)
-        if  users_serializer.is_valid():
-            user = users_serializer.save()
-            url = request.build_absolute_uri(f"/user/{user.UserId}")
-            return JsonResponse({'url': url}, status=201, safe=False)            
-        return  JsonResponse('Failed to Add',safe=False)
+        
+        user_data = JSONParser().parse(request)
+        users_serializer = UserSerializer(data=user_data)
+        
+        if users_serializer.is_valid():
+            users_serializer.save()
+            return JsonResponse("Atualizado com sucesso",safe=False)
+        return JsonResponse("Atuazalição falhou", safe=False)
+        
     elif request.method=='PUT':
         user_data=JSONParser().parse(request)
-        user=User.objects.get(UserId=pk)
-        users_serializer=UserSerializer(data=user_data)
+        user=User.objects.get(UserId=user_data['UserId'])
+        users_serializer=UserSerializer(user,data=user_data)
         if users_serializer.is_valid():
             users_serializer.save()
             return JsonResponse("Atualizado com sucesso",safe=False)
