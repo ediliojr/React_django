@@ -1,0 +1,12 @@
+body {
+	background-image: url('https://cdn.myportfolio.com/846d6150937d91a5d929de24a4585d11/7e71cb6d-ed01-44a1-8a41-b7cbd5b82fe2_rw_1920.png?h=2f73b27ecbf0e5d4409621773b3512c0');
+  
+	background-size: cover;
+	background-position: top center;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+  
+}
