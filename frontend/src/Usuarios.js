@@ -13,7 +13,7 @@ export class Usuarios extends Component {
             users: [],
             // variaveis usadas para janela de modificação
             modalTitle: "",
-            UserData_nascimento: "",
+            UserData_cadastro: new Date(),
             UserData_nascimento: "",
             UserSobrenome: "",
             UserEmail: "",
@@ -35,15 +35,19 @@ export class Usuarios extends Component {
     }
 
     changeUserName =(e)=>{
-        this.setState({FirstName:e.target.value});
+        this.setState({UserNome:e.target.value});
     }
     
     changeUserLastName =(e)=>{
-        this.setState({LastName:e.target.value});
+        this.setState({UserSobrenome:e.target.value});
     }
     
     changeUserEmail =(e)=>{
-        this.setState({Email:e.target.value});
+        this.setState({UserEmail:e.target.value});
+    }
+
+    changeUserNascimento =(e)=>{
+        this.setState({UserData_nascimento:e.target.value});
     }
 
     addClick(use) {
@@ -52,6 +56,9 @@ export class Usuarios extends Component {
             UserId: "",
             UserNome: "",
             UserSobrenome: "",
+            UserEmail: "",
+            UserData_nascimento: "",
+            UserData_cadastro: "",
         })
     }
 
@@ -61,24 +68,27 @@ export class Usuarios extends Component {
             UserId: use.UserId,
             UserNome: use.UserNome,
             UserSobrenome: use.UserSobrenome,
-            UserEmail: use.UserEmail
+            UserEmail: use.UserEmail,
+            UserData_nascimento: use.UserData_nascimento,
+            UserData_cadastro: use.UserData_cadastro,
 
         })
     }
 
-    createClick(pk) {
-        fetch(variables.API_URL+'user/'+pk, {
+    createClick() {
+        fetch(variables.API_URL, {
             method: 'POST',
             headers: {
                 'Accept':'application/json',
                 'Content-Type':'application/json'
             },
             body: JSON.stringify({
-                UserId: pk,
+                UserId: this.state.UserId,
                 UserNome: this.state.UserNome,
                 UserSobrenome: this.state.UserSobrenome,
                 UserEmail: this.state.UserEmail,
-                UserData_nascimento: this.state.UserData_nascimento
+                UserData_nascimento: this.state.UserData_nascimento,
+                UserData_cadastro: this.state.currentDate,
                  
             }
             )
@@ -93,20 +103,21 @@ export class Usuarios extends Component {
             })
     }
 
-    updateClick(UserId) {
-        fetch(variables.API_URL+'user/'+UserId, {
+    updateClick() {
+        fetch(variables.API_URL+'user/'+this.state.UserId, {
             method: 'PUT',
             headers: {
                 'Accept':'application/json',
                 'Content-Type':'application/json'
             },
             body: JSON.stringify({
-                UserId: UserId,
+                UserId: this.state.UserId,
                 UserNome: this.state.UserNome,
                 UserSobrenome: this.state.UserSobrenome,
                 UserEmail: this.state.UserEmail,
                 UserData_nascimento: this.state.UserData_nascimento,
-                UserData_cadastro: this.state.UserData_cadastro,
+                UserData_cadastro: this.state.UserData_cadastro,             
+               
                 
             })
 
@@ -148,6 +159,8 @@ export class Usuarios extends Component {
             UserSobrenome,
             UserEmail,
             UserData_nascimento,
+            currentDate = new Date(),
+            isDate = currentDate.toISOString(),
 
         } = this.state;
 
@@ -193,7 +206,7 @@ export class Usuarios extends Component {
                                 <td>{use.UserData_cadastro}</td>
                                 <td>
                                     <button type="button"
-                                        className="btn btn-light mr-1" data-bs-toggle="modal" data-bs-target="#exampleModal" onClick={() => this.editClick(UserId)}>Editar
+                                        className="btn btn-light mr-1" data-bs-toggle="modal" data-bs-target="#exampleModal" onClick={() => this.editClick(use)}>Editar
                                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-pencil-square" viewBox="0 0 16 16">
                                             <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z" />
                                             <path fillRule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z" />
@@ -223,23 +236,33 @@ export class Usuarios extends Component {
                                 <div className="input-group mb-3">
                                     <span className="input-group-text">Nome do Usuario
                                     </span>
-                                    <input type="text" className="form-control"
+                                    <input type="text" className="form-control" placeholder='Nome'
                                         value={users.UserNome}
                                         onChange={this.changeUserName}></input>
+                                    
                                     <div className="input-group mb-3"></div>
                                     <span className="input-group-text">SobreNome do Usuario</span>
-                                    <input type="text" className="form-control"
+                                    <input type="text" className="form-control" placeholder='Sobrenome'
                                         value={users.UserSobrenome}
                                         onChange={this.changeUserLastName}></input>
+                                    <div className="input-group mb-3"></div>
                                     <span className="input-group-text">Email</span>
-                                    <input type="text" className="form-control"
+                                    <input type="text" className="form-control" placeholder='email@email.com'
                                         value={users.UserEmail}
                                         onChange={this.changeUserEmail}></input>
+                                    <div className="input-group mb-3"></div>
+                                    <span className="input-group-text">Data nascimento</span>
+                                    <input type="date" className="form-control" 
+                                        value={users.UserData_nascimento}
+                                        onChange={this.changeUserNascimento}></input>
+                                    
+                                    
+                                    
                                 </div> </div>
 
                             {UserId == 0 ?
                                 <button type="button"
-                                    className="btn btn-primary float-start" onClick={() => this.createClick(users.UserId)}>Create</button>
+                                    className="btn btn-primary float-start" onClick={() => this.createClick()}>Create</button>
                                 : null}
 
                             {UserId != 0 ?

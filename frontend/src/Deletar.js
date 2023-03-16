@@ -5,10 +5,12 @@ import { variables } from './Variables';
 export class Deletar extends Component {
     constructor(props) {
         super(props);
+        
         this.state = {
             users: [],
             selectedUser: null,
         }
+        
     }
 
     componentDidMount() {
@@ -55,7 +57,7 @@ export class Deletar extends Component {
             const { users, selectedUser } = this.state;
     
             return (
-                <div>
+                <div className='pad'>
                     <select value={selectedUser ? selectedUser.UserId : ''} onChange={this.handleUserChange}>
                         <option value="">Selecione um usuário</option>
                         {users.map(user =>

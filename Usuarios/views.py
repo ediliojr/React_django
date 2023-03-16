@@ -36,26 +36,31 @@ def userAPI(request,pk=0):
         
         if users_serializer.is_valid():
             users_serializer.save()
-            return JsonResponse("Atualizado com sucesso",safe=False)
-        return JsonResponse("Atuazalição falhou", safe=False)
+            return JsonResponse("Criado com sucesso",safe=False)
+        return JsonResponse("Criação falhou", safe=False)
         
-    elif request.method=='PUT':
-        user_data=JSONParser().parse(request)
-        user=User.objects.get(UserId=user_data['UserId'])
-        users_serializer=UserSerializer(user,data=user_data)
-        if users_serializer.is_valid():
-            users_serializer.save()
-            return JsonResponse("Atualizado com sucesso",safe=False)
-        return JsonResponse("Atuazalição falhou", safe=False)
-    elif request.method=='DELETE':
-        
-        user=User.objects.get(UserId=pk)
-        user.delete()
-        return  JsonResponse("Deletado com sucesso",safe=False)
-    
+    elif request.method == 'PUT':
+        user_data = JSONParser().parse(request)
 
-# @csrf_exempt
-# def SaveFile(request):
-#     file=request.FILES['file']
-#     file_name=default_storage.save(file.name,file)
-#     return JsonResponse(file_name, safe=False)
+        try:
+            user = User.objects.get(UserId=user_data.get('UserId'))
+            users_serializer = UserSerializer(user, data=user_data)
+
+            if users_serializer.is_valid():
+                users_serializer.save()
+                return JsonResponse('Atualizado com sucesso', safe=False)
+
+            return JsonResponse('Atualização falhou', safe=False)
+
+        except User.DoesNotExist:
+            return JsonResponse({'error': 'User matching query does not exist.'})
+
+    elif request.method=='DELETE':
+        try:
+            user=User.objects.get(UserId=pk)
+            user.delete()
+            return  JsonResponse("Deletado com sucesso",safe=False)
+        except User.DoesNotExist:
+            return JsonResponse({'error': 'User matching query does not exist.'})
+        
+

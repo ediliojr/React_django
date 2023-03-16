@@ -1,5 +1,6 @@
 from django.db import models
 
+
 # Create your models here.
 
 
@@ -10,3 +11,5 @@ class User(models.Model):
     UserEmail = models.EmailField('Email',max_length=150)
     UserData_nascimento = models.DateField ('Data Nascimento', blank=True, null=True)
     UserData_cadastro = models.DateTimeField(auto_now_add=True, blank=True)
+
+
