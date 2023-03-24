@@ -1,4 +1,4 @@
-# EDESOFT_TESTE
+# Backend DJango API frontend React.JS
 
 <h1>Teste tecnico</h1>
 
