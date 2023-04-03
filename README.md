@@ -1,4 +1,4 @@
-# Backend DJango API frontend React.JS
+# Backend DJango API REST with frontend React.JS
 
 <h1>Teste tecnico</h1>
 
